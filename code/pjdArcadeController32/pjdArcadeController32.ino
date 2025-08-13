@@ -22,10 +22,10 @@ Adafruit_MPR121 cap1 = Adafruit_MPR121();
 Adafruit_MPR121 cap2 = Adafruit_MPR121();
 Adafruit_MPR121 cap3 = Adafruit_MPR121();
 
-volatile uint8_t touch_X  = (uint8_t)0x10000000;
-volatile uint8_t touch_Y  = (uint8_t)0x10000000;
-volatile uint8_t touch_Z  = (uint8_t)0x10000000;
-volatile uint8_t touch_RZ = (uint8_t)0x10000000;
+volatile uint8_t touch_X  = (uint8_t)0b10000000;
+volatile uint8_t touch_Y  = (uint8_t)0b10000000;
+volatile uint8_t touch_Z  = (uint8_t)0b10000000;
+volatile uint8_t touch_RZ = (uint8_t)0b10000000;
 
 
 void setup() {
@@ -92,6 +92,8 @@ void setup1() {
     }
   }
 
+  digitalWrite(LED_BUILTIN, 1);
+
   // cap1.setThreshholds(5, 2);
   // cap2.setThreshholds(5, 2);
   // cap3.setThreshholds(5, 2);
@@ -155,9 +157,20 @@ void loop() {
 
   usb_hid.sendReport(0, &gp, sizeof(gp));
 
-
 }
 
 void loop1(){
-  
+  uint32_t touchedData =cap1.touched();
+  touchedData += cap2.touched() << 12;
+  touchedData += cap3.touched() << 24;
+
+  if (touchedData)
+  {
+    digitalWrite(LED_BUILTIN, 1);
+  }
+  else
+  {
+    digitalWrite(LED_BUILTIN, 0);
+  }
+
 }
