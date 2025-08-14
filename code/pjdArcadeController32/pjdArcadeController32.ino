@@ -69,19 +69,19 @@ void setup1() {
 
   Wire.setSDA(SDA);
   Wire.setSCL(SCL);
-  if (!cap1.begin(MPR121_ADDRESS1, &Wire)) {
+  if (!cap1.begin(MPR121_ADDRESS1, &Wire, MPR121_TOUCH_THRESHOLD_DEFAULT, MPR121_RELEASE_THRESHOLD_DEFAULT, true)) {
     digitalWrite(LED_BUILTIN, 1);
     while (1) {
       ;
     }
   }
-  if (!cap2.begin(MPR121_ADDRESS2, &Wire)) {
+  if (!cap2.begin(MPR121_ADDRESS2, &Wire, MPR121_TOUCH_THRESHOLD_DEFAULT, MPR121_RELEASE_THRESHOLD_DEFAULT, true)) {
     digitalWrite(LED_BUILTIN, 1);
     while (1) {
       ;
     }
   }
-  if (!cap3.begin(MPR121_ADDRESS3, &Wire)) {
+  if (!cap3.begin(MPR121_ADDRESS3, &Wire, MPR121_TOUCH_THRESHOLD_DEFAULT, MPR121_RELEASE_THRESHOLD_DEFAULT, true)) {
     digitalWrite(LED_BUILTIN, 1);
     while (1) {
       ;
@@ -89,10 +89,6 @@ void setup1() {
   }
 
   digitalWrite(LED_BUILTIN, 1);
-
-  // cap1.setThreshholds(5, 2);
-  // cap2.setThreshholds(5, 2);
-  // cap3.setThreshholds(5, 2);
 }
 
 void loop() {
