@@ -22,11 +22,7 @@ Adafruit_MPR121 cap1 = Adafruit_MPR121();
 Adafruit_MPR121 cap2 = Adafruit_MPR121();
 Adafruit_MPR121 cap3 = Adafruit_MPR121();
 
-bool touch_value_changing = false;
-uint8_t touch_X = (uint8_t)0b10000000;
-uint8_t touch_Y = (uint8_t)0b10000000;
-uint8_t touch_Z = (uint8_t)0b10000000;
-uint8_t touch_RZ = (uint8_t)0b10000000;
+uint32_t touch_value = 0x80808080;
 
 void setup() {
   TinyUSBDevice.setID(VID, PID);
@@ -69,19 +65,19 @@ void setup1() {
 
   Wire.setSDA(SDA);
   Wire.setSCL(SCL);
-  if (!cap1.begin(MPR121_ADDRESS1, &Wire, MPR121_TOUCH_THRESHOLD_DEFAULT, MPR121_RELEASE_THRESHOLD_DEFAULT, true)) {
+  if (!cap1.begin(MPR121_ADDRESS1, &Wire, MPR121_TOUCH_THRESHOLD, MPR121_RELEASE_THRESHOLD_DEFAULT, true)) {
     digitalWrite(LED_BUILTIN, 1);
     while (1) {
       ;
     }
   }
-  if (!cap2.begin(MPR121_ADDRESS2, &Wire, MPR121_TOUCH_THRESHOLD_DEFAULT, MPR121_RELEASE_THRESHOLD_DEFAULT, true)) {
+  if (!cap2.begin(MPR121_ADDRESS2, &Wire, MPR121_TOUCH_THRESHOLD, MPR121_RELEASE_THRESHOLD_DEFAULT, true)) {
     digitalWrite(LED_BUILTIN, 1);
     while (1) {
       ;
     }
   }
-  if (!cap3.begin(MPR121_ADDRESS3, &Wire, MPR121_TOUCH_THRESHOLD_DEFAULT, MPR121_RELEASE_THRESHOLD_DEFAULT, true)) {
+  if (!cap3.begin(MPR121_ADDRESS3, &Wire, MPR121_TOUCH_THRESHOLD, MPR121_RELEASE_THRESHOLD_DEFAULT, true)) {
     digitalWrite(LED_BUILTIN, 1);
     while (1) {
       ;
@@ -104,14 +100,14 @@ void loop() {
 
   if (!usb_hid.ready()) return;
 
-  // 変更中か確認し、変更中の場合は待機
-  while (touch_value_changing) {
-    ;
+  bool result = rp2040.fifo.pop_nb(&touch_value);
+  if (result)
+  {
+    gp.x  =  touch_value & 0x000000ff;
+    gp.y  = (touch_value & 0x0000ff00) >> 8;
+    gp.z  = (touch_value & 0x00ff0000) >> 16;
+    gp.rz = (touch_value & 0xff000000) >> 24;
   }
-  gp.x = touch_X;
-  gp.y = touch_Y;
-  gp.z = touch_Z;
-  gp.rz = touch_RZ;
 
   gp.buttons = 0;
   gp.buttons |= !(uint)digitalRead(BUTTON_PIN_A) << BUTTON_CONT_A_bp;
@@ -160,17 +156,9 @@ void loop1() {
   // 若い番号のタッチセンサは左に設置した。pjdは若い番号が右なので、ビットスワップ。
   touchedData = reverseBits32(touchedData);
 
-  // タッチセンサ順番　Z回転　Z軸　Y軸　X軸
-  touch_value_changing = true;
-  touch_X = touchedData | 0x000000ff;
-  touch_Y = (touchedData | 0x0000ff00) >> 8;
-  touch_Z = (touchedData | 0x00ff0000) >> 16;
-  touch_RZ = (touchedData | 0xff000000) >> 24;
-  touch_X ^= 0b10000000;
-  touch_Y ^= 0b10000000;
-  touch_Z ^= 0b10000000;
-  touch_RZ ^= 0b10000000;
-  touch_value_changing = false;
+  // 各軸の最上位は反転
+  touchedData ^= 0x80808080;
+  rp2040.fifo.push_nb(touchedData);
 }
 
 uint32_t reverseBits32(uint32_t x) {

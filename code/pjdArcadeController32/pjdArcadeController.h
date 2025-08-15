@@ -54,10 +54,12 @@ typedef struct TU_ATTR_PACKED
 #define SDA 0
 #define SCL 1
 
+#define MPR121_TOUCH_THRESHOLD 20
+
 #define BUTTON_PIN_A        2
 #define BUTTON_PIN_B        3
-#define BUTTON_PIN_Y        4
-#define BUTTON_PIN_X        5
+#define BUTTON_PIN_Y        5
+#define BUTTON_PIN_X        4
 #define BUTTON_PIN_PLUS     12
 #define BUTTON_PIN_MINUS    13
 #define BUTTON_PIN_L        6
@@ -67,16 +69,15 @@ typedef struct TU_ATTR_PACKED
 #define BUTTON_PIN_LEFT     16
 #define BUTTON_PIN_RIGHT    15
 #define BUTTON_PIN_DOWN     17
-//#define BUTTON_PIN_CENTER   12
 
-#define BUTTON_CONT_A_bp    3
-#define BUTTON_CONT_B_bp    2
-#define BUTTON_CONT_Y_bp    1
-#define BUTTON_CONT_X_bp    4
-#define BUTTON_CONT_PLUS_bp   10
-#define BUTTON_CONT_MINUS_bp  9
-#define BUTTON_CONT_L_bp      5
-#define BUTTON_CONT_R_bp      6
+#define BUTTON_CONT_A_bp    2
+#define BUTTON_CONT_B_bp    1
+#define BUTTON_CONT_Y_bp    0
+#define BUTTON_CONT_X_bp    3
+#define BUTTON_CONT_PLUS_bp   9
+#define BUTTON_CONT_MINUS_bp  8
+#define BUTTON_CONT_L_bp      4
+#define BUTTON_CONT_R_bp      5
 
 #define MPR121_ADDRESS1 0x5A
 #define MPR121_ADDRESS2 0x5B
