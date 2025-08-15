@@ -118,6 +118,10 @@ void loop() {
   gp.buttons |= !(uint)digitalRead(BUTTON_PIN_MINUS) << BUTTON_CONT_MINUS_bp;
   gp.buttons |= !(uint)digitalRead(BUTTON_PIN_L) << BUTTON_CONT_L_bp;
   gp.buttons |= !(uint)digitalRead(BUTTON_PIN_R) << BUTTON_CONT_R_bp;
+  gp.buttons |= !(uint)digitalRead(BUTTON_PIN_ZL) << BUTTON_CONT_ZL_bp;
+  gp.buttons |= !(uint)digitalRead(BUTTON_PIN_ZR) << BUTTON_CONT_ZR_bp;
+  gp.buttons |= !(uint)digitalRead(BUTTON_PIN_LB) << BUTTON_CONT_LB_bp;
+  gp.buttons |= !(uint)digitalRead(BUTTON_PIN_RB) << BUTTON_CONT_RB_bp;
 
   if (!digitalRead(BUTTON_PIN_UP) && !digitalRead(BUTTON_PIN_RIGHT)) {
     gp.hat = GAMEPAD_HAT_UP_RIGHT;

@@ -64,6 +64,10 @@ typedef struct TU_ATTR_PACKED
 #define BUTTON_PIN_MINUS    13
 #define BUTTON_PIN_L        6
 #define BUTTON_PIN_R        7
+#define BUTTON_PIN_ZL       8
+#define BUTTON_PIN_ZR       9
+#define BUTTON_PIN_LB       10
+#define BUTTON_PIN_RB       11
 
 #define BUTTON_PIN_UP       14
 #define BUTTON_PIN_LEFT     16
@@ -78,6 +82,10 @@ typedef struct TU_ATTR_PACKED
 #define BUTTON_CONT_MINUS_bp  8
 #define BUTTON_CONT_L_bp      4
 #define BUTTON_CONT_R_bp      5
+#define BUTTON_CONT_ZL_bp      6
+#define BUTTON_CONT_ZR_bp      7
+#define BUTTON_CONT_LB_bp      10
+#define BUTTON_CONT_RB_bp      11
 
 #define MPR121_ADDRESS1 0x5A
 #define MPR121_ADDRESS2 0x5B
